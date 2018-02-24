@@ -21,10 +21,6 @@ import java.util.List;
 public class ProductsActivity extends AppCompatActivity {
 
     public static final String EXPLORE_DATA = "com.example.shanespiess.shanetest.EXPLORE_DATA";
-    private static final String ENDPOINT = "https://www.abercrombie.com/anf/nativeapp/qa/codetest/codeTest_exploreData.json";
-
-    private RequestQueue mRequestQueue;
-    private Gson mGson;
     private Product[] mProducts;
 
     @Override
@@ -32,25 +28,30 @@ public class ProductsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_products);
 
-        mRequestQueue = Volley.newRequestQueue(this);
-
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        mGson = gsonBuilder.create();
-
         if(savedInstanceState == null) {
-            fetchProducts();
+            DataService.getInstance(this).fetchProducts(new DataService.DataServiceListener() {
+                @Override
+                public void onProductsLoaded(Product[] products) {
+                    mProducts = products;
+                    initializeDisplayContent();
+                }
+            });
         } else {
             mProducts = (Product[]) savedInstanceState.getParcelableArray(EXPLORE_DATA);
+            initializeDisplayContent();
         }
 
-        initializeDisplayContent();
     }
 
     private void initializeDisplayContent() {
-
         final RecyclerView recyclerProducts = (RecyclerView) findViewById(R.id.list_products);
         final LinearLayoutManager productsLayoutManager = new LinearLayoutManager(this);
         recyclerProducts.setLayoutManager(productsLayoutManager);
+
+        final ProductRecyclerAdapter productRecyclerAdapter =
+                new ProductRecyclerAdapter(this, Arrays.asList(mProducts));
+
+        recyclerProducts.setAdapter(productRecyclerAdapter);
     }
 
     @Override
@@ -59,27 +60,4 @@ public class ProductsActivity extends AppCompatActivity {
         outState.putParcelableArray(EXPLORE_DATA, mProducts);
     }
 
-    private void fetchProducts() {
-        StringRequest request = new StringRequest(Request.Method.GET, ENDPOINT, onProductsLoaded, onProductsError);
-        mRequestQueue.add(request);
-    }
-
-    private final Response.Listener<String> onProductsLoaded = new Response.Listener<String>() {
-        public Object products;
-
-        @Override
-        public void onResponse(String response) {
-            Log.i("ProductsActivity", response);
-            List<Product> products = Arrays.asList(mGson.fromJson(response, Product[].class));
-            Log.i("ProductsActivity", products.size() + " total loaded");
-            mProducts = (Product[]) products.toArray();
-        }
-    };
-
-    private final Response.ErrorListener onProductsError = new Response.ErrorListener() {
-        @Override
-        public void onErrorResponse(VolleyError error) {
-            Log.e("ProductsActivity", error.toString());
-        }
-    };
 }
