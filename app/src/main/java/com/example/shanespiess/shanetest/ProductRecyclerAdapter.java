@@ -3,6 +3,7 @@ package com.example.shanespiess.shanetest;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,7 +42,11 @@ public class ProductRecyclerAdapter extends RecyclerView.Adapter<ProductRecycler
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Product product = mProducts.get(position);
-        holder.mTextBottomDescription.setText(product.bottomDescription);
+        if (product.bottomDescription != null) {
+            holder.mTextBottomDescription.setText(Html.fromHtml(product.bottomDescription));
+        } else {
+            holder.mTextBottomDescription.setText("");
+        }
         holder.mTextPromoMessage.setText(product.promoMessage);
         holder.mTextTitle.setText(product.title);
         holder.mTextTopDescription.setText(product.topDescription);
