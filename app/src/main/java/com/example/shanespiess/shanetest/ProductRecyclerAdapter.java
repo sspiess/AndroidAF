@@ -60,7 +60,8 @@ public class ProductRecyclerAdapter extends RecyclerView.Adapter<ProductRecycler
         holder.mTextTitle.setText(product.title);
         holder.mTextTopDescription.setText(product.topDescription);
         holder.mImageBackground.setImageUrl(product.backgroundImage, mImageLoader);
-        if (product.content != null) {
+        holder.mContentLayout.removeAllViews();
+        if (product.content != null ) {
             for (ContentItem contentItem : product.content) {
                 AppCompatButton button = createNewButton(contentItem);
                 holder.mContentLayout.addView(button);
