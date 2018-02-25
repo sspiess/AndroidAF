@@ -15,6 +15,7 @@
         app:contentPadding="0dp">
 
         <android.support.constraint.ConstraintLayout
+            android:id="@+id/layout_products"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -33,7 +34,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="TextView"
+                android:text=""
                 android:textAlignment="center"
                 android:textAppearance="@android:style/TextAppearance.Material.Medium"
                 android:textSize="13sp"
@@ -46,7 +47,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="TextView"
+                android:text=""
                 android:textAlignment="center"
                 android:textAppearance="@android:style/TextAppearance.Material.Large"
                 android:textSize="17sp"
@@ -60,7 +61,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="TextView"
+                android:text=""
                 android:textAlignment="center"
                 android:textAppearance="@android:style/TextAppearance.Material.Medium"
                 android:textSize="11sp"
@@ -73,14 +74,25 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="TextView"
+                android:text=""
                 android:textAlignment="center"
                 android:textAppearance="@android:style/TextAppearance.Material.Small"
                 android:textSize="13sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/text_promo_message" />
+
+            <LinearLayout
+                android:id="@+id/layout_content"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/text_bottom_description"></LinearLayout>
+
         </android.support.constraint.ConstraintLayout>
 
     </android.support.v7.widget.CardView>
+
 </FrameLayout>
