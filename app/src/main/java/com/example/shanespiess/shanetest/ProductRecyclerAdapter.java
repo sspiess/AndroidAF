@@ -1,6 +1,7 @@
 package com.example.shanespiess.shanetest;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -81,6 +82,9 @@ public class ProductRecyclerAdapter extends RecyclerView.Adapter<ProductRecycler
             @Override
             public void onClick(View view) {
                 Log.i("Test", contentItem.target);
+                Intent intent = new Intent(mContext, WebActivity.class);
+                intent.putExtra(WebActivity.WEB_URL, contentItem.target);
+                mContext.startActivity(intent);
             }
         });
 
