@@ -34,26 +34,14 @@ public class DataService {
     private Product[] mProducts;
     private DataServiceListener mDataServiceListener;
 
-    private DataService(Context context) {
+    private DataService(Context context, RequestQueue requestQueue, ImageLoader imageLoader) {
         mContext = context;
-        mRequestQueue = mRequestQueue = Volley.newRequestQueue(mContext.getApplicationContext());
+        mRequestQueue = requestQueue;
 
         GsonBuilder gsonBuilder = new GsonBuilder();
         mGson = gsonBuilder.create();
 
-        mImageLoader = new ImageLoader(mRequestQueue, new ImageLoader.ImageCache() {
-
-            private final LruCache<String, Bitmap> cache = new LruCache<String, Bitmap>(20);
-            @Override
-            public Bitmap getBitmap(String url) {
-                return cache.get(url);
-            }
-
-            @Override
-            public void putBitmap(String url, Bitmap bitmap) {
-                cache.put(url, bitmap);
-            }
-        });
+        mImageLoader = imageLoader;
     }
 
     public interface DataServiceListener {
@@ -61,12 +49,39 @@ public class DataService {
         public void onProductsLoaded(Product[] products);
     }
 
+    public static DataService getInstance(Context context, RequestQueue requestQueue, ImageLoader imageLoader) {
+        if (mInstance == null) {
+            mInstance = new DataService(context, requestQueue, imageLoader);
+        }
+        return mInstance;
+    }
+
     public static DataService getInstance(Context context) {
         if (mInstance == null) {
-            mInstance = new DataService(context);
+            RequestQueue requestQueue = Volley.newRequestQueue(context.getApplicationContext());
+
+            ImageLoader imageLoader = new ImageLoader(requestQueue, new ImageLoader.ImageCache() {
+
+                private final LruCache<String, Bitmap> cache = new LruCache<String, Bitmap>(20);
+                @Override
+                public Bitmap getBitmap(String url) {
+                    return cache.get(url);
+                }
+
+                @Override
+                public void putBitmap(String url, Bitmap bitmap) {
+                    cache.put(url, bitmap);
+                }
+            });
+
+            return getInstance(context, requestQueue, imageLoader);
         }
 
         return mInstance;
+    }
+
+    public void setProducts(Product[] products) {
+        mProducts = products;
     }
 
     public ImageLoader getImageLoader() {
